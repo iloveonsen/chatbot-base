@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <title>{% block title %}{% endblock title %}</title>
+    {% block stylesheets %}
+    {% endblock stylesheets %}
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    {% block content %}
+    
+    {% endblock content %}
+</body>
+<script src="{% static "js/app.js" %}"></script>
+{% block scripts %}
+{% endblock scripts %}
+</html>
