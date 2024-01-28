@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Chatbot
+{% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static "chat/css/styles.css" %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chatbot</h2>
+                </div>
+                <div class="chat-body">
+                    <div class="messages">
+                        <div class="message">
+                            <p>Hi, I'm a chatbot. I can help you with your questions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <form action="" method="POST" id="chat-form">
+                        {% csrf_token %}
+                        <input type="text" name="message" id="chat-message" placeholder="Type your message here...">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
