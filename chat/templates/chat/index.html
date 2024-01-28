@@ -11,29 +11,42 @@ Chatbot
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h2>Chatbot</h2>
-                </div>
-                <div class="chat-body">
-                    <div class="messages">
-                        <div class="message">
-                            <p>Hi, I'm a chatbot. I can help you with your questions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-footer">
-                    <form action="" method="POST" id="chat-form">
-                        {% csrf_token %}
-                        <input type="text" name="message" id="chat-message" placeholder="Type your message here...">
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
-                </div>
+<div class="chat-container">
+
+    <div id="chat-window" class="chat-window">
+        <!-- Chat messages will be appended here -->
+        <div class="message user-message">
+            <div class="icon">👤</div>
+            <div class="message-box">
+                <div class="message-text">Hello, Chatbot!</div>
             </div>
         </div>
+        <div class="message chatbot-message">
+            <div class="icon">🤖</div>
+            <div class="message-box">
+                <div class="message-text">Hi there! How can I assist you today?</div>
+            </div>
+        </div>
+        <div class="message user-message">
+            <div class="icon">👤</div>
+            <div class="message-box">
+                <div class="message-text">I'm looking for information about web development.</div>
+            </div>
+        </div>
+        <div class="message chatbot-message">
+            <div class="icon">🤖</div>
+            <div class="message-box">
+                <div class="message-text">Sure! Web development encompasses a wide range of topics. Are you interested in front-end, back-end, or full-stack development?</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <form class="chat-form" action="" method="POST">
+            {% csrf_token %}
+            <input type="text" id="user-input" class="user-input" placeholder="Type a message..." required>
+            <button type="submit" class="send-button"><i class="zmdi zmdi-mail-send"></i></button>
+        </form>
     </div>
 </div>
 
