@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+My page
+{% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static "users/css/styles.css" %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="profile-container">
+    <div class="profile-window">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="profile-image-section">
+                <label for="id_profile_image">Profile Image:</label>
+                <div class="profile-image">
+                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*">
+                    <img src="{{ profile.imageURL }}" alt="profile">
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="profile-field">
+                    <label for="id_name">Name:</label>
+                    <input type="text" name="name" id="id_name" value="{{ profile.name }}">
+                </div>
+                <div class="profile-field">
+                    <label>Username:</label>
+                    <div class="readonly-field">{{ profile.username }}</div>
+                </div>
+                <div class="profile-field">
+                    <label>Email:</label>
+                    <div class="readonly-field">{{ profile.email }}</div>
+                </div>
+                <div class="profile-field">
+                    <label>Last Login:</label>
+                    <div class="readonly-field">{{ profile.last_login }}</div>
+                </div>
+            </div>
+            <div class="profile-update">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
