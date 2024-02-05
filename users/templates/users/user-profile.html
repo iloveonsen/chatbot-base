@@ -15,35 +15,41 @@ My page
     <div class="profile-window">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
+
             <div class="profile-image-section">
-                <label for="id_profile_image">Profile Image:</label>
+                <label for="id_profile_image">{{ form.profile_image.label }}</label>
                 <div class="profile-image">
-                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*">
-                    <img src="{{ profile.imageURL }}" alt="profile">
+                    {{ form.profile_image }}
+                    <img src="{{ profile.image_url }}" alt="profile" id="profile-image-preview">
                 </div>
             </div>
+            
             <div class="profile-info">
                 <div class="profile-field">
-                    <label for="id_name">Name:</label>
-                    <input type="text" name="name" id="id_name" value="{{ profile.name }}">
+                    <label for="id_name">{{ form.name.label }}</label>
+                    {{ form.name }}
                 </div>
                 <div class="profile-field">
-                    <label>Username:</label>
-                    <div class="readonly-field">{{ profile.username }}</div>
+                    <label>Username</label>
+                    <div class="readonly-field">{{ profile.user.username }}</div>
                 </div>
                 <div class="profile-field">
-                    <label>Email:</label>
-                    <div class="readonly-field">{{ profile.email }}</div>
+                    <label>Email</label>
+                    <div class="readonly-field">{{ profile.user.email }}</div>
                 </div>
                 <div class="profile-field">
-                    <label>Last Login:</label>
-                    <div class="readonly-field">{{ profile.last_login }}</div>
+                    <label>Last Login</label>
+                    <div class="readonly-field">{{ profile.user.last_login }}</div>
                 </div>
             </div>
             <div class="profile-update">
                 <button type="submit">Update</button>
             </div>
         </form>
+
+        <div class="addition-link">
+            <a href="{% url "delete-account" %}">Delete account</a>
+        </div>
     </div>
 </div>
 

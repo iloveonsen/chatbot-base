@@ -1,18 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 import uuid
 
 # Create your models here.
 
+name_validator = RegexValidator(r'^[ㄱ-ㅎ가-힣a-zA-Z0-9][ㄱ-ㅎ가-힣a-zA-Z0-9 ]*[ㄱ-ㅎ가-힣a-zA-Z0-9]$', 'Only letters, numbers, and spaces are allowed')
+
 class Profile(models.Model):
+    # remove username and email from here (use User model instead)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True, null=True) 
-    email = models.EmailField(max_length=500, blank=True, null=True)
-    username = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True, validators=[name_validator]) 
     profile_image = models.ImageField(null=True, blank=True, upload_to="profiles/", default="profiles/user-default.png")
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False) # Primary key, not editable
     created = models.DateTimeField(auto_now_add=True) # Automatically add date and time
-    last_login = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.user.username) # Return username as string
@@ -21,7 +22,7 @@ class Profile(models.Model):
         ordering = ["created"] # Created date ascending order 
     
     @property
-    def imageURL(self):
+    def image_url(self):
         try:
             url = self.profile_image.url
         except:

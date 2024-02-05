@@ -93,3 +93,34 @@ h3 {
 .main-content {
     padding-top: 70px; /* Same as the navbar height plus some space */
 }
+
+/* Sticky Alert message styles */
+.alert {
+    width: 500px; /* Fixed width */
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 8px; /* Added roundness */
+    position: fixed; /* Make the alert stick to the viewport */
+    top: 62px; /* Height of the navbar */
+    left: 50%; /* Center the alert horizontally */
+    transform: translateX(-50%); /* Adjust for the fixed width to center properly */
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: added a light box-shadow for depth */
+    z-index: 999; /* Ensure it's below the navbar if using a higher z-index there */
+}
+
+.alert-success { color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6; }
+.alert-info { color: #31708f; background-color: #d9edf7; border-color: #bce8f1; }
+.alert-error { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
+
+.alert .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.75rem 1.25rem;
+    color: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
