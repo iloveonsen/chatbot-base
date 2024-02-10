@@ -1,94 +1,131 @@
 .chat-container {
     width: 80%;
     max-width: 800px;
-    margin: 20px auto;
+    padding: 10px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-window {
     width: 100%;
-    height: 800px;
     overflow-y: auto;
+    flex-grow: 1;
     padding: 20px;
+    margin-bottom: 1rem;
     border-radius: 8px;
     background-color: white;
-    margin: 1rem 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
+/* Optional: Customize the scrollbar */
+.chat-window::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+    background: #ececec;
+    border-radius: 10px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .input-area {
-    margin: auto;
+    background-color: white;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: space-between;
-    
+    width: 100%;
+    height: auto;
+    margin: auto;
 }
 
 .chat-form {
     display: flex;
     width: 100%;
+    height: auto;
+    align-items: center;
 }
 
 .user-input {
-    flex-grow: 1; /* Allows the input to expand and fill the space */
-    margin-right: 10px; /* Adds some space between the input and the button */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    flex-grow: 1;
+    line-height: 1.5;
+    border: none;
+    outline: none;
+    padding: 5px 10px; /* Adjusted for exact height calculation */
+    resize: none;
     font-size: 1.2rem;
+    overflow-y: hidden; /* Initially hide scrollbar */
+    margin-right: 5px;
 }
 
 .send-button {
-    padding: 10px 20px;
-    border: 1px solid #ddd;
+    width: 40px;
+    height: 40px;
     background-color: #007bff;
-    color: white;
-    cursor: pointer;
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    font-size: 1.2rem;
-    
+    cursor: pointer;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.send-button:hover {
-    background-color: #0056b3;
+/* Optional: Customize the scrollbar */
+.user-input::-webkit-scrollbar {
+    width: 10px;
 }
+
+.user-input::-webkit-scrollbar-thumb {
+    background: #ececec;
+    border-radius: 10px;
+}
+
+.user-input::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 
 .message {
     display: flex;
+    align-items: flex-start; /* Aligns children (image and content) to the top */
+    padding: 10px; /* Adjust as needed */
+    font-size: 1.2rem;
+}
+
+.message-profile {
+    flex: 0 0 40px; /* Fixes the width to 20px and prevents it from growing or shrinking */
+    margin-right: 20px; /* Adds some space between the profile image and the message content */
+}
+
+.message-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Creates a round shape */
+    object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */
+}
+
+.message-content {
+    max-width: 90%; /* Adjust as needed */
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+    flex-grow: 1;
+    word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+    overflow-wrap: break-word; /* Ensures proper wrapping in all browsers */
+    
 }
 
-.icon {
-    font-size: 24px; /* Adjust size as needed */
-    margin-bottom: 5px;
-}
-
-.message-box {
-    max-width: 80%;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-.user-message .message-box {
-    background-color: #e7f5ff;
-    align-self: flex-end;
-}
-
-.user-message .icon {
-    align-self: flex-end;
-}
-
-.chatbot-message .message-box {
-    background-color: #f1f0f0;
-    align-self: flex-start;
-}
-
-.chatbot-message .icon {
-    align-self: flex-start;
+.message-profile-name {
+    font-weight: bold; /* Emphasizes the sender's name */
+    margin-bottom: 5px; /* Adds some space between the name and the message text */
 }
 
 .message-text {
-    margin: 0;
+    margin: 0; /* Removes the default paragraph margin */
 }
