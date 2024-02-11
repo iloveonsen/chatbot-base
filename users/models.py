@@ -16,7 +16,7 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True) # Automatically add date and time
 
     def __str__(self):
-        return str(self.user.username) # Return username as string
+        return str(self.name) # Return username as string
     
     class Meta:
         ordering = ["created"] # Created date ascending order 
@@ -30,3 +30,10 @@ class Profile(models.Model):
             self.save()
             url = self.profile_image.url
         return url
+
+
+class BotConfiguration(models.Model):
+    bot_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.bot_profile.name} - Bot Configuration'

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Chatbot
+Chat Sessions
 {% endblock title %}
 
 {% block stylesheets %}
@@ -12,27 +12,25 @@ Chatbot
 {% block content %}
 
 <div class="chat-container">
+    <div class="chat-window">
 
-    <div id="chat-window" class="chat-window">
-        <!-- Chat messages will be appended here -->
-
-        {% for user_message in user_messages %}
-            {% include "chat/includes/message.html" %}
+        {% for chat_session in chat_sessions  %}
+            {% include "chat/includes/session.html" %}
         {% endfor %}
 
     </div>
 
-    <div class="input-area">
-        <form class="chat-form" method="POST">
+    <div class="create-session">
+        <form action="{% url "create-chat-session" %}" method="post">
             {% csrf_token %}
-            {{ form.message }}
-            <button type="submit" class="send-button"><i class="zmdi zmdi-mail-send"></i></button>
+            <button>Create new session</button>
         </form>
     </div>
-    
 </div>
 
+
 {% endblock content %}
+
 
 {% block scripts %}
 <script src="{% static "chat/js/app.js" %}"></script>

@@ -1,0 +1,21 @@
+{% load static %}
+
+<div class="session">
+    <div class="session-content">
+        <a href="{% url "chat" chat_session.id %}" class="session-link">
+            <div class="session-title">{{ chat_session.title }}</div>
+            <hr class="session-divider">
+            <div class="session-last-update">Last updated: {{ chat_session.updated_at|date:"Y/m/d H:i" }}</div>
+        </a>
+        <!-- Delete link as a separate entity -->
+        <div class="delete-session">
+            <form action="{% url "delete-chat-session" chat_session.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">
+                    <i class="zmdi zmdi-delete" style="padding-right: 2px;"></i> Delete
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</div>
