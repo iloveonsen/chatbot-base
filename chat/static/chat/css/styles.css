@@ -129,3 +129,94 @@
 .message-text {
     margin: 0; /* Removes the default paragraph margin */
 }
+
+.session {
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 10px auto 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.session-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 10px;
+    background-color: white; /* Background color is now set here for transition */
+}
+
+.session:hover .session-content{
+    background-color: #007bff; /* Entire box changes color on hover */
+}
+
+.session-link {
+    margin-bottom: 10px;
+}
+
+.session-link {
+    text-decoration: none;
+    color: black; /* Default color for links */
+    transition: color 0.3s; /* Smooth transition for text color */
+}
+
+.session:hover .session-link {
+    color: white; /* Changes text color to white on hover for visibility */
+}
+
+.session-title {
+    font-size: 1.5rem;
+    word-wrap: break-word;
+}
+
+.session-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px auto;
+}
+
+.session-last-update {
+    font-size: 1rem;
+    text-align: right; /* Aligns text to the right */
+    display: block; /* Ensures it's treated as a block-level element */
+}
+
+.delete-session {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    transition: color 0.3s; /* Smooth transition for text color */
+}
+
+.delete-session button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1rem;
+    color: black; /* Default color for links */
+    transition: color 0.3s; /* Smooth transition for text color */
+    padding: 0;
+}
+
+.delete-session button:hover {
+    color: red; /* Changes link color to red on hover */
+}
+
+.create-session {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto 0;
+    font-size: 1rem;
+}
+
+.create-session button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #007bff; /* Default color for links */
+    transition: color 0.3s; /* Smooth transition for text color */
+}
+
+
