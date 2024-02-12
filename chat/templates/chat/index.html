@@ -15,15 +15,17 @@ Chatbot
 
     <div id="chat-window" class="chat-window">
         <!-- Chat messages will be appended here -->
-
+        
         {% for user_message in user_messages %}
             {% include "chat/includes/message.html" %}
         {% endfor %}
 
+
+
     </div>
 
     <div class="input-area">
-        <form class="chat-form" method="POST">
+        <form id="chat-form" class="chat-form" method="POST">
             {% csrf_token %}
             {{ form.message }}
             <button type="submit" class="send-button"><i class="zmdi zmdi-mail-send"></i></button>
@@ -31,6 +33,13 @@ Chatbot
     </div>
     
 </div>
+
+{% if profile %}
+<div id="user-profile-data" data-image-url="{{ profile.image_url }}" data-name="{{ profile.name }}"></div>
+{% endif %}
+{% if bot_profile %}
+<div id="bot-profile-data" data-image-url="{{ bot_profile.image_url }}" data-name="{{ bot_profile.name }}"></div>
+{% endif %}
 
 {% endblock content %}
 

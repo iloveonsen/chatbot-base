@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from .forms import *
 from .models import *
+from .utils import *
 
 
 # Create your views here.
@@ -25,7 +27,6 @@ class DefaultChatView(LoginRequiredMixin, View):
             title="New session",
             owner=request.user.profile,
         )
-        chat_session.save()
 
         # save input message in newly created session
         user_message_form = UserMessageForm(request.POST)
@@ -34,7 +35,19 @@ class DefaultChatView(LoginRequiredMixin, View):
             user_message.session = chat_session
             user_message.owner = request.user.profile
             user_message.save()
-            # Redirect to the chat page or the chat session page
+
+            # update session title with summarized title
+            chat_session.title = summarize_session_title(user_message.message)
+            chat_session.save()
+
+            response = get_chatbot_response(user_message.message, user_message.session, user_message.owner)
+
+            bot_response = BotResponse.objects.create(
+                session=chat_session,
+                user_message=user_message,
+                response=response,
+            )
+            bot_response.save()
         else:
             print(user_message_form.errors)
         return redirect('chat', pk=chat_session.id)
@@ -47,13 +60,15 @@ class ChatView(LoginRequiredMixin, View):
     template_name = 'chat/index.html'
 
     def get(self, request, pk):
+        bot_config = BotConfiguration.objects.first()
+        bot_profile = bot_config.bot_profile
         user_message_form = UserMessageForm()
         profile = request.user.profile
         chat_session = profile.chat_sessions.get(id=pk)
         user_messages = chat_session.user_messages.all()
-        for message in user_messages:
-            print(message.message)
         context = {
+            'bot_profile': bot_profile,
+            'profile': profile,
             'chat_session': chat_session,
             'user_messages': user_messages,
             'form': user_message_form,
@@ -62,16 +77,27 @@ class ChatView(LoginRequiredMixin, View):
     
     def post(self, request, pk):
         chat_session = ChatSession.objects.get(id=pk)
-        user_message_form = UserMessageForm(request.POST)
-        if user_message_form.is_valid():
-            user_message = user_message_form.save(commit=False)  
-            user_message.session = chat_session
-            user_message.owner = request.user.profile
-            user_message.save()
-            # Redirect to the chat page or the chat session page
-        else:
-            print(user_message_form.errors)
-        return redirect('chat', pk=pk)
+        user_input = request.POST.get('message')
+        user_message = UserMessage.objects.create(
+            message=user_input,
+            session=chat_session,
+            owner=request.user.profile,
+        )    
+        user_message.save()
+
+        response = get_chatbot_response(user_message.message, user_message.session, user_message.owner)
+
+        bot_response = BotResponse.objects.create(
+            session=chat_session,
+            user_message=user_message,
+            response=response,
+        )
+        bot_response.save()
+
+        context = {
+            'response': response
+        }
+        return JsonResponse(context)
     
 
 class ChatSessionsView(LoginRequiredMixin, ListView):
@@ -81,6 +107,10 @@ class ChatSessionsView(LoginRequiredMixin, ListView):
     model = ChatSession
     ordering = ['-created_at']
     context_object_name = 'chat_sessions'
+
+    def get_queryset(self):
+        profile = self.request.user.profile
+        return profile.chat_sessions.all()
 
 
 class CreateChatSessionView(LoginRequiredMixin, View):
