@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from users.models import Profile
+from users.models import Profile, BotConfiguration
 import uuid
 
 # Create your models here.
@@ -37,6 +37,7 @@ class BotResponse(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='bot_responses')
     user_message = models.OneToOneField(UserMessage, on_delete=models.CASCADE, related_name='bot_response')
+    bot_configuration = models.ForeignKey(BotConfiguration, on_delete=models.CASCADE, default=1)
     response = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

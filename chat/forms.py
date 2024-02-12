@@ -18,7 +18,7 @@ class UserMessageForm(forms.ModelForm):
         }
 
 
-class BotResponse(forms.ModelForm):
+class BotResponseForm(forms.ModelForm):
     class Meta:
         model = BotResponse
         fields = ['response']
