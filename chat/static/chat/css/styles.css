@@ -54,6 +54,7 @@
 }
 
 .user-input {
+    font-family: inherit;
     flex-grow: 1;
     line-height: 1.5;
     border: none;
@@ -98,6 +99,7 @@
     align-items: flex-start; /* Aligns children (image and content) to the top */
     padding: 10px; /* Adjust as needed */
     font-size: 1.2rem;
+    width: 100%;
 }
 
 .message-profile {
@@ -128,6 +130,7 @@
 
 .message-text {
     margin: 0; /* Removes the default paragraph margin */
+    white-space: pre-wrap; /* Preserves line breaks and spaces */
 }
 
 .session {
@@ -219,4 +222,22 @@
     transition: color 0.3s; /* Smooth transition for text color */
 }
 
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
 
+.spinner i{
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

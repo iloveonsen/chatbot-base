@@ -25,6 +25,12 @@ chatForm.addEventListener('submit', function (event) {
     // When the route is index, execute ordinary form submission without js intervention
     const currentUrl = window.location.href;
     if (currentUrl.includes('/index')) {
+        const spinner = document.createElement('div');
+        spinner.classList.add('spinner');
+        spinner.innerHTML = `
+        <i class="zmdi zmdi-spinner zmdi-hc-lg"></i>
+        `;
+        chatWindow.appendChild(spinner);
         return; 
     }
 
@@ -32,7 +38,7 @@ chatForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
     const userInput = chatFormTextArea.value.trim();
-    console.log(userInput);
+    // console.log(userInput);
     chatFormTextArea.value = '';
     if (!userInput) {
         return;
@@ -48,15 +54,19 @@ chatForm.addEventListener('submit', function (event) {
         <img src="${userProfileData.dataset.imageUrl}" alt="">
     </div>
     <div class="message-content">
-        <div class="message-profile-name">
-            ${userProfileData.dataset.name}
-        </div>
-        <div class="message-text">
-            ${userInput}
-        </div>
+        <div class="message-profile-name">${userProfileData.dataset.name}</div>
+        <div class="message-text">${userInput}</div>
     </div>
     `;
+
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+    spinner.innerHTML = `
+    <i class="zmdi zmdi-spinner zmdi-hc-lg"></i>
+    `;
+
     chatWindow.appendChild(messageItem);
+    chatWindow.appendChild(spinner);
 
     
     fetch('', {
@@ -71,23 +81,22 @@ chatForm.addEventListener('submit', function (event) {
     })
         .then(response => response.json())
         .then(data => {
-            const botResponse = data.response
+            const botResponse = data.response.trim();
             const messageItem = document.createElement('div');
             messageItem.classList.add('message');
-
+            
+            // make sure there's no space between the opening tag, the text content, and the closing tag.
             messageItem.innerHTML = `
             <div class="message-profile">
                 <img src="${botProfileData.dataset.imageUrl}" alt="">
             </div>
             <div class="message-content">
-                <div class="message-profile-name">
-                    ${botProfileData.dataset.name}
-                </div>
-                <div class="message-text">
-                    ${botResponse}
-                </div>
+                <div class="message-profile-name">${botProfileData.dataset.name}</div>
+                <div class="message-text">${botResponse}</div>
             </div>
             `;
+            
+            spinner.remove();
             chatWindow.appendChild(messageItem);
         });
 });
