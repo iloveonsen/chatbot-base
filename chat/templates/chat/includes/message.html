@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="message">
+    <div class="message-profile">
+        <img src="{{ user_message.owner.image_url }}" alt="">
+    </div>
+    <div class="message-content">
+        <div class="message-profile-name">{{ user_message.owner.name }}</div>
+        <div class="message-text">{{ user_message.message }}</div>
+    </div>
+</div>
+
+{% if user_message.bot_response %}
+<div class="message">
+    <div class="message-profile">
+        <img src="{{ user_message.bot_response.bot_configuration.bot_profile.image_url }}" alt="">
+    </div>
+    <div class="message-content">
+        <div class="message-profile-name">{{ user_message.bot_response.bot_configuration.bot_profile.name }}</div>
+        <div class="message-text">{{ user_message.bot_response.response }}</div>
+    </div>
+</div>
+{% endif %}
+

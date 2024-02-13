@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Chat Sessions
+{% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static "chat/css/styles.css" %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="chat-container">
+    <div class="chat-window">
+
+        {% for chat_session in chat_sessions  %}
+            {% include "chat/includes/session.html" %}
+        {% endfor %}
+
+    </div>
+
+    <div class="create-session">
+        <form action="{% url "create-chat-session" %}" method="post">
+            {% csrf_token %}
+            <button>Create new session</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+
+

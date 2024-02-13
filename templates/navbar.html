@@ -1,10 +1,19 @@
 {% load static %}
 
-<header>
-    <hr>
-    <h1><a href="{% url "index" %}">True Friend</a></h1>
-    <nav>
-        <a href="">History</a>
-    </nav>
-    <hr>
+<header id="navigation">
+    <div class="navigation-content">
+        <h1 class="logo"><a href="{% url "login" %}">True Friend</a></h1>
+        <nav>
+            {% if request.user.is_authenticated %}
+            <a href="{% url "chat-sessions" %}">Sessions</a>
+            <a href="{% url "user-profile" %}">My Page</a>
+            <form action="{% url "logout" %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url "login" %}">Login</a>
+            {% endif %}
+        </nav>
+    </div>
 </header>
