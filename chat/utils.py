@@ -49,7 +49,6 @@ def get_chatbot_response(user_message, session, owner):
         messages.append(AIMessage(content=existing_bot_response.response))
 
     response = chat.invoke(messages)
-    print(response)
     return response.content.strip()
 
 

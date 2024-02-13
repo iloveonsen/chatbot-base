@@ -15,6 +15,18 @@ Chatbot
 
     <div id="chat-window" class="chat-window">
         <!-- Chat messages will be appended here -->
+
+        {% if not user_messages %}
+        <div class="message">
+            <div class="message-profile">
+                <img src="{{ bot_profile.image_url }}" alt="">
+            </div>
+            <div class="message-content">
+                <div class="message-profile-name">{{ bot_profile.name }}</div>
+                <div class="message-text">Hello! I am a chatbot. How can I help you?</div>
+            </div>
+        </div>
+        {% endif %}
         
         {% for user_message in user_messages %}
             {% include "chat/includes/message.html" %}

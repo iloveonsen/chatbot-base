@@ -15,8 +15,11 @@ class DefaultChatView(LoginRequiredMixin, View):
     template_name = 'chat/index.html'
 
     def get(self, request):
+        bot_config = BotConfiguration.objects.first()
+        bot_profile = bot_config.bot_profile
         user_message_form = UserMessageForm()
         context = {
+            'bot_profile': bot_profile,
             'form': user_message_form # render the form in the template
         }
         return render(request, self.template_name, context=context)
