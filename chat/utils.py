@@ -29,13 +29,9 @@ def summarize_session_title(user_message):
 def get_chatbot_response(user_message, session, owner):
     chat = ChatOpenAI(temperature=.2)
 
-
     messages = [
         SystemMessage(
             content="You are a helpful ai kindly reply to user."
-        ),
-        HumanMessage(
-            content=user_message
         ),
     ]
 
@@ -47,6 +43,8 @@ def get_chatbot_response(user_message, session, owner):
         except Exception as e:
             break
         messages.append(AIMessage(content=existing_bot_response.response))
+    
+    messages.append(HumanMessage(content=user_message))
 
     response = chat.invoke(messages)
     return response.content.strip()

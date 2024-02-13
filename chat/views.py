@@ -81,6 +81,11 @@ class ChatView(LoginRequiredMixin, View):
     def post(self, request, pk):
         chat_session = ChatSession.objects.get(id=pk)
         user_input = request.POST.get('message')
+
+        if UserMessage.objects.filter(session=chat_session).count() == 0:
+            chat_session.title = summarize_session_title(user_input)
+            chat_session.save()
+
         user_message = UserMessage.objects.create(
             message=user_input,
             session=chat_session,
