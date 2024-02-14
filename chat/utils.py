@@ -38,7 +38,7 @@ def summarize_session_title(user_message):
 
 
 def get_chatbot_response(user_message, session, owner):
-    vectorstore_path = f"./vectorstore/{str(owner)}" # 이 부분을 사용자 username을 가져와야 합니다.
+    vectorstore_path = f"./vectorstore/{str(owner)}"
     vectorstore = Chroma(embedding_function=embedding_fn, persist_directory=vectorstore_path)
     retriever = vectorstore.as_retriever(search_kwargs=dict(k=5))
     memory = VectorStoreRetrieverMemory(retriever=retriever) # return_docs=True
@@ -68,7 +68,7 @@ def get_chatbot_response(user_message, session, owner):
 
 
     PROMPT = PromptTemplate(
-        input_variables=["history", "인간"], template=_DEFAULT_TEMPLATE
+        input_variables=["history", "사용자"], template=_DEFAULT_TEMPLATE
     )
 
 
@@ -83,7 +83,7 @@ def get_chatbot_response(user_message, session, owner):
 
     input = {'사용자': user_message}
     response = conversation_with_summary.predict(**input)
-    
+
     return response.strip()
 
 
