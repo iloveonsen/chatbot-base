@@ -5,22 +5,27 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 from langchain.memory import ConversationBufferMemory
 import faiss
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_openai import OpenAI
-from langchain.docstore import InMemoryDocstore
-from langchain.vectorstores import FAISS
-from langchain.vectorstores import Chroma
+from langchain_community.docstore import InMemoryDocstore
+from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores import Chroma
 from langchain.memory import VectorStoreRetrieverMemory
 
+import chromadb
 from chat.models import UserMessage, BotResponse
+
+from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
 
-embedding_size = 1536 # Dimensions of the OpenAIEmbeddings
-index = faiss.IndexFlatL2(embedding_size)
+
+# https://api.python.langchain.com/en/stable/_modules/langchain_community/vectorstores/chroma.html#Chroma.__init__
+# https://docs.trychroma.com/usage-guide#initiating-a-persistent-chroma-client
+vectorstore_path = Path("./vectorstore/")
+client = chromadb.PersistentClient(path=str(vectorstore_path))
 embedding_fn = OpenAIEmbeddings()
-#vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
 
 def summarize_session_title(user_message):
     llm = OpenAI(temperature=0)
@@ -38,8 +43,7 @@ def summarize_session_title(user_message):
 
 
 def get_chatbot_response(user_message, session, owner):
-    vectorstore_path = f"./vectorstore/{str(owner)}"
-    vectorstore = Chroma(embedding_function=embedding_fn, persist_directory=vectorstore_path)
+    vectorstore = Chroma(client=client, embedding_function=embedding_fn, collection_name=owner.user.username)
     retriever = vectorstore.as_retriever(search_kwargs=dict(k=5))
     memory = VectorStoreRetrieverMemory(retriever=retriever) # return_docs=True
 
@@ -76,7 +80,7 @@ def get_chatbot_response(user_message, session, owner):
         llm=llm,
         prompt=PROMPT,
         memory=memory,
-        verbose=True,
+        verbose=False,
         input_key="사용자",
         output_key="루나"
     )
@@ -85,10 +89,6 @@ def get_chatbot_response(user_message, session, owner):
     response = conversation_with_summary.predict(**input)
 
     return response.strip()
-
-
-# if __name__ == "__main__":
-#     print(summarize_session_title("I want to go to Japan will you help me make plans?"))
 
 
 
