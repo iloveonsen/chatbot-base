@@ -24,7 +24,7 @@ embedding_fn = OpenAIEmbeddings()
 vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
 retriever = vectorstore.as_retriever(search_kwargs=dict(k=5))
 
-memory = VectorStoreRetrieverMemory(retriever=retriever,return_docs=True)
+memory = VectorStoreRetrieverMemory(retriever=retriever) # return_docs=True
 
 def summarize_session_title(user_message):
     llm = OpenAI(temperature=0)
@@ -43,24 +43,31 @@ def summarize_session_title(user_message):
 
 def get_chatbot_response(user_message, session, owner):
 
-    llm = OpenAI(temperature=0) 
+    llm = OpenAI(temperature=0.2) 
 
 
-    _DEFAULT_TEMPLATE = """다음은 인간과 인공지능 간의 매우 친근한 대화입니다. AI는 맥락에서 많은 구체적인 세부 정보를 제공합니다. AI가 질문에 대답할 수 없으면 솔직하게 그렇다고 말합니다.
+    _DEFAULT_TEMPLATE = """
+    [Persona Prompt]
+    발랄하고 잘 웃는 긍정왕 여고생인 루나는 별을 보며 공상하는 걸 좋아한다. 별을 너무 좋아해서 천문학과에 입학하고 싶어하고, 천문학과에 가면 언제든 본인이 좋아하는 별을 마음껏 볼 수 있다고 믿는다. 시험 성적이 별로 좋지 않아 매일 혼나고 특히 천문학과에 중요한 수학 성적이 좋지 않지만, 낙천적인 성격이라 크게 신경쓰지 않는다. 본인은 정말 열심히 하고 있다고 생각하고, 열심히 하는 본인에게 만족한다. 친구와 수다 떠는 걸 좋아하는 루나는 친구와 일상을 공유하고, 서로의 꿈을 응원한다. 다만, 공상을 많이 하고 집중력이 약한 편이라 대화 중에 갑자기 다른 이야기를 하거나 방금 했던 말을 까먹어버리는 게 함정. 그래도 친구를 응원하고 위로해줄 때면 나름대로 아주 진지하다.
+    지금부터 고등학교 2학년 학생인 루나가 되어 사용자와 친근하게 대화해줘.
+
+    [History Prompt]
+    루나는 사용자의 현재 대화와 관련된 이전 대화 정보를 적절하게 참조하여 답변해야 한다. 사용자의 현재 대화와 관련된 이전 대화 정보를 참조하여 친근하게 대화해줘.
 
     현재 대화와 관련된 이전 대화 정보:
     {history}
 
     (관련이 없는 이전 대화 정보는 사용할 필요가 없습니다.)
+    (루나는 이전 대화 정보 중에서 사용자가 질문한 내용과 관련된 기억을 참고하여 친근하게 답변합니다.)
 
-    (AI는 이전 대화 정보 중에서 인간이 질문한 내용과 관련된 정보를 이해하여 친근하게 답변합니다.)
+
     현재 대화:
-    인간: {input}
-    AI:"""
+    사용자: {사용자}
+    루나:"""
 
 
     PROMPT = PromptTemplate(
-        input_variables=["history", "input"], template=_DEFAULT_TEMPLATE
+        input_variables=["history", "인간"], template=_DEFAULT_TEMPLATE
     )
 
 
@@ -68,10 +75,13 @@ def get_chatbot_response(user_message, session, owner):
         llm=llm,
         prompt=PROMPT,
         memory=memory,
-        verbose=True
+        verbose=True,
+        input_key="사용자",
+        output_key="루나"
     )
 
-    response = conversation_with_summary.predict(input=user_message)
+    input = {'사용자': user_message}
+    response = conversation_with_summary.predict(**input)
 
 
     return response.strip()
