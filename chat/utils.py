@@ -9,22 +9,18 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain_openai import OpenAI
 from langchain.docstore import InMemoryDocstore
 from langchain.vectorstores import FAISS
+from langchain.vectorstores import Chroma
 from langchain.memory import VectorStoreRetrieverMemory
 
 from chat.models import UserMessage, BotResponse
 
 from dotenv import load_dotenv
-
 load_dotenv()
 
 embedding_size = 1536 # Dimensions of the OpenAIEmbeddings
 index = faiss.IndexFlatL2(embedding_size)
-
 embedding_fn = OpenAIEmbeddings()
-vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
-retriever = vectorstore.as_retriever(search_kwargs=dict(k=5))
-
-memory = VectorStoreRetrieverMemory(retriever=retriever) # return_docs=True
+#vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
 
 def summarize_session_title(user_message):
     llm = OpenAI(temperature=0)
@@ -42,8 +38,12 @@ def summarize_session_title(user_message):
 
 
 def get_chatbot_response(user_message, session, owner):
+    vectorstore_path = f"./vectorstore/{str(owner)}" # 이 부분을 사용자 username을 가져와야 합니다.
+    vectorstore = Chroma(embedding_function=embedding_fn, persist_directory=vectorstore_path)
+    retriever = vectorstore.as_retriever(search_kwargs=dict(k=5))
+    memory = VectorStoreRetrieverMemory(retriever=retriever) # return_docs=True
 
-    llm = OpenAI(temperature=0.2) 
+    llm = OpenAI(temperature=0.2)
 
 
     _DEFAULT_TEMPLATE = """
@@ -57,8 +57,9 @@ def get_chatbot_response(user_message, session, owner):
     현재 대화와 관련된 이전 대화 정보:
     {history}
 
-    (관련이 없는 이전 대화 정보는 사용할 필요가 없습니다.)
-    (루나는 이전 대화 정보 중에서 사용자가 질문한 내용과 관련된 기억을 참고하여 친근하게 답변합니다.)
+    (루나는 이전 대화 정보 중에서 사용자가 질문한 내용과 관련이 없는 기억은 사용하지 않습니다.)
+    (루나는 참조한 이전 대화 정보를 바탕으로 새로운 답변을 생성해야 합니다.)
+
 
 
     현재 대화:
@@ -82,8 +83,7 @@ def get_chatbot_response(user_message, session, owner):
 
     input = {'사용자': user_message}
     response = conversation_with_summary.predict(**input)
-
-
+    
     return response.strip()
 
 
