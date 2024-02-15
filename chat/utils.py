@@ -31,8 +31,19 @@ vectorstore_path = Path("./vectorstore/")
 client = chromadb.PersistentClient(path=str(vectorstore_path))
 embedding_fn = OpenAIEmbeddings()
 
+
 def format_docs(docs):
     return "\n".join([d.page_content for d in docs])
+
+
+def delete_collections(username):
+    try:
+        client.delete_collection(name=username)
+    except Exception as e:
+        print(str(e))
+        return False
+    return True
+  
 
 def summarize_session_title(user_message):
     llm = OpenAI(temperature=0)
