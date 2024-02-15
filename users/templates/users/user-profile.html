@@ -50,8 +50,16 @@ My page
         <div class="addition-link">
             <a href="{% url "delete-account" %}">Delete account</a>
         </div>
+
+        <div class="addition-link">
+            <div id="clear-collection">Clear vector collection</div>
+        </div>
     </div>
 </div>
 
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static "users/js/app.js" %}"></script>
+{% endblock scripts %}
