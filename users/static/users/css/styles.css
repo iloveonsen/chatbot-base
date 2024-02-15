@@ -162,3 +162,12 @@
     text-decoration: none;
 }
 
+.addition-link div {
+    color: #ff0000;
+    cursor: pointer;
+}
+
+.addition-link div:hover {
+    color: #d40000;
+}
+
